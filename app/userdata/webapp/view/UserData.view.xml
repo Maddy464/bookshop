@@ -1,0 +1,163 @@
+<mvc:View controllerName="ns.userdata.controller.UserData"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+	xmlns:smartTable="sap.ui.comp.smarttable"
+	xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:controls="ns.userdata.utils"
+	xmlns:table="sap.ui.table"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+
+     <Page id="page" title="{i18n>title}">
+     <content>
+
+         <f:SimpleForm id="mySimpleForm" >
+        <f:content>
+            <Label id="_IDGenLabel" text="Product Name"/>
+            <Input id="_IDGenInput5" value="{ProductName}"/>
+            <Label id="_IDGenLabel1" text="Price"/>
+            <Input id="_IDGenInput6" value="{Price}" type="Number"/>
+            <Label id="_IDGenLabel2" text="Currency"/>
+            <Input id="_IDGenInput7" value="{Currency}"/>
+
+        </f:content>
+    </f:SimpleForm>
+
+     <Button id="_IDGenButton" text="Create" press="onCreateSalesOrder" type="Emphasized" />
+
+	 <Button id="_IDGenButton1" text="SalesCreate" press="onCreateSalesOrder2" type="Emphasized" />
+
+	 <Button id="_IDGenButton2" text="CALLFuncCAPM" press="onCapmfunction" type="Emphasized" />
+
+	 <Button id="_IDGenButton3" text="CALLActionCAPM" press="onCapmaction" type="Emphasized" />
+
+	 <Button id="_IDGenButton4" text="CAPM_Publish" press="onPublish" type="Emphasized" />
+
+
+	 <Button id="_IDGenButton5" text="CAPM_Read_Product" press="onReadProduct" type="Emphasized" />
+
+	 <Button id="_IDGenButton6" text="CAPM_External" press="onCapm_extenal" type="Emphasized" />
+
+     
+
+
+
+
+        <controls:MyRatingControl
+                    id="myRatingControl"
+                    value="3"
+                    maxValue="5"
+                    text="Rate Now!"
+                    submit="onSubmitRating" />
+
+
+
+
+
+
+
+
+						<Table
+							id="peopleList"
+							growing="true"
+							growingThreshold="10"
+							items="{
+								path: '/User',
+								parameters: {
+									$count: true,
+									$$updateGroupId : 'peopleGroup'
+								}
+							}">
+							<headerToolbar>
+								<OverflowToolbar id="_IDGenOverflowToolbar">
+									<content>
+										<ToolbarSpacer id="_IDGenToolbarSpacer"/>
+										<SearchField
+											id="searchField"
+											width="20%"
+											placeholder="{i18n>searchFieldPlaceholder}"
+											enabled="{= !${appView>/hasUIChanges}}"
+											search=".onSearch"/>
+										<Button
+											id="addUserButton"
+											icon="sap-icon://add"
+											tooltip="{i18n>createButtonText}"
+											press=".onCreate">
+											<layoutData>
+												<OverflowToolbarLayoutData id="_IDGenOverflowToolbarLayoutData" priority="NeverOverflow"/>
+											</layoutData>
+										</Button>
+										<Button
+											id="refreshUsersButton"
+											icon="sap-icon://refresh"
+											enabled="{= !${appView>/hasUIChanges}}"
+											tooltip="{i18n>refreshButtonText}"
+											press=".onRefresh"/>
+										<Button
+											id="sortUsersButton"
+											icon="sap-icon://sort"
+											enabled="{= !${appView>/hasUIChanges}}"
+											tooltip="{i18n>sortButtonText}"
+											press=".onSort"/>
+									</content>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column id="userNameColumn">
+									<Text id="_IDGenText1" text="{i18n>userNameLabelText}"/>
+								</Column>
+								<Column id="firstNameColumn">
+									<Text id="_IDGenText2" text="{i18n>firstNameLabelText}"/>
+								</Column>
+								<Column id="lastNameColumn">
+									<Text id="_IDGenText3" text="{i18n>lastNameLabelText}"/>
+								</Column>
+								<Column id="ageColumn">
+									<Text id="_IDGenText4" text="{i18n>ageLabelText}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem id="_IDGenColumnListItem">
+									<cells>
+										<Input id="_IDGenInput"
+											value="{UserName}"
+											valueLiveUpdate="true"
+											liveChange=".onInputChange"/>
+									</cells>
+									<cells>
+										<Input id="_IDGenInput1"
+											value="{FirstName}"
+											liveChange=".onInputChange"/>
+									</cells>
+									<cells>
+										<Input id="_IDGenInput2"
+											value="{LastName}"
+											liveChange=".onInputChange"/>
+									</cells>
+									<cells>
+										<Input id="_IDGenInput3"
+											value="{Age}"
+											valueLiveUpdate="true"
+											liveChange=".onInputChange"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</content>
+					<footer>
+						<Toolbar id="_IDGenToolbar" visible="{appView>/hasUIChanges}">
+							<ToolbarSpacer id="_IDGenToolbarSpacer1"/>
+							<Button
+								id="saveButton"
+								type="Emphasized"
+								text="{i18n>saveButtonText}"
+								enabled="{= ${message>/}.length === 0 &amp;&amp; ${appView>/usernameEmpty} === false }"
+								press=".onSave"/>
+							<Button
+								id="doneButton"
+								text="{i18n>cancelButtonText}"
+								press=".onResetChanges"/>
+						</Toolbar>
+					</footer>
+    </Page> 
+</mvc:View>
