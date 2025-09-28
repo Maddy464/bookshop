@@ -10,6 +10,8 @@ app.use(express.json());
 //const GWSAMPLE = require('./external/GWSAMPLE.csn');
 const { ConnectBackend } = require('./lib/ConnectionHandler');
 
+const LOG = cds.log('my-service-logger');
+
 
 
 
@@ -64,13 +66,53 @@ class SalesOrderService extends cds.ApplicationService {
 
     async createSalesOrder(req) {
 
+
+        LOG.info('Inside  createSalesOrder .');
+
+
+           try {
+                const bpaService = await cds.connect.to('bpa_service'); // Connect to the destination
+
+                 var startContext = { "POId": "300001999" };
+                 var workflowStartPayload = { definitionId: "com.demowf", context: startContext }
+
+                const payload = {
+                    definitionId: "your_workflow_definition_id", // Replace with your workflow's definition ID
+                    context: {
+                        // Pass any required input parameters for your workflow
+                        "inputParameter1": "value1",
+                        "inputParameter2": 123
+                    }
+                };
+
+                const response = await bpaService.send('POST', '/v1/workflow-instances', JSON.stringify(workflowStartPayload), {
+                    'Content-Type': 'application/json'
+                });
+
+                if (response.status !== 201) {
+                    throw new Error(`Failed to trigger workflow: ${response.statusText}`);
+                    
+                }
+
+                return { message: "Workflow triggered successfully!", instanceId: response.id };
+                
+
+            } catch (error) {
+                console.error("Error triggering workflow:", error);
+                req.error(500, `Failed to trigger workflow: ${error.message}`);
+            }
+
+
+
+
+
         const { SalesOrders } = this.entities;
         //const { SalesType, SalesOzation} = req.data;
 
         await INSERT.into(SalesOrders).entries({
 
-            SalesOrderType: "CC",
-            SalesOrganization: "1501"
+            SalesOrderType: "WF",
+            SalesOrganization: "9991"
 
         });
 
