@@ -5,6 +5,7 @@
 	xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
 	xmlns:controls="ns.userdata.utils"
 	xmlns:table="sap.ui.table"
+	xmlns:u="sap.ui.unified"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
 
@@ -37,6 +38,19 @@
 	 <Button id="_IDGenButton5" text="CAPM_Read_Product" press="onReadProduct" type="Emphasized" />
 
 	 <Button id="_IDGenButton6" text="CAPM_External" press="onCapm_extenal" type="Emphasized" />
+
+
+	 <VBox id="_IDGenVBox">
+    <u:FileUploader
+        id="fileUploader"
+        uploadUrl="/odata/v4/sales-order/uploadFile" 
+        uploadComplete="onUploadComplete"
+        sendXHR="true"
+        fileType="pdf,png,jpg"
+        placeholder="Choose a file..."
+    />
+    <Button id="_IDGenButton8" text="Upload" press="onUploadPress"/>
+</VBox>
 
      
 

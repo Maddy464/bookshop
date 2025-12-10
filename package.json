@@ -1,0 +1,49 @@
+{
+  "name": "bookshop",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9",
+    "express": "^4",
+    "@sap/xssec": "^4",
+    "@sap-cloud-sdk/connectivity": "^3",
+    "@sap-cloud-sdk/http-client": "^3",
+    "@sap-cloud-sdk/resilience": "^3"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": "^9",
+    "cds-plugin-ui5": "^0.13.0",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.29"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-booksfiori": "cds watch --open booksfiori/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-userdata": "cds watch --open userdataindex.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy bookshop --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  },
+  "private": true,
+  "workspaces": [
+    "app/*"
+  ],
+  "cds": {
+    "requires": {
+      "[production]": {
+        "auth": "mocked"
+      },
+      "db": "hana",
+      "GWSAMPLE": {
+        "kind": "odata-v2",
+        "model": "srv/external/GWSAMPLE",
+        "credentials": {
+          "destination": "ES5",
+          "path": "/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/"
+        }
+      }
+    }
+  }
+}

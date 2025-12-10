@@ -11,7 +11,7 @@ app.use(express.json());
 const { ConnectBackend } = require('./lib/ConnectionHandler');
 
 const LOG = cds.log('my-service-logger');
-
+const { log } = require("console");
 
 
 
@@ -25,8 +25,14 @@ class CatalogService extends cds.ApplicationService {
 
     Validatestock(req) {
 
+
+
         const { Books } = this.entities;
         const { ID, stock } = req.data;
+
+        log("Starting CAP_DOX Extraction--ID ", req.data.ID);
+
+        
 
         INSERT.into(Books).entries({
 
@@ -58,49 +64,60 @@ class SalesOrderService extends cds.ApplicationService {
     
 
     async init() {
-        this.on('createSalesOrder', this.createSalesOrder);
+        this.on('createSalesOrder', this.createSalesOrder);  
+
+        this.on('uploadFile', async (req) => {
+
+             log('Inside  uploadFile .');
+
+
+    const fileContent = req.data.file; 
+    // Process the fileContent here (e.g., save to database, send to external service)
+       log("Received file content:", fileContent);
+    // Add your logic for handling the uploaded file
+    return "File uploaded successfully!";
+  });
         
+        
+
         return await super.init();
     }
 
-
     async createSalesOrder(req) {
+        log('Inside  createSalesOrder .');
 
 
-        LOG.info('Inside  createSalesOrder .');
+        //    try {
+        //         const bpaService = await cds.connect.to('bpa_service'); // Connect to the destination
 
+        //          var startContext = { "POId": "300001999" };
+        //          var workflowStartPayload = { definitionId: "com.demowf", context: startContext }
 
-           try {
-                const bpaService = await cds.connect.to('bpa_service'); // Connect to the destination
+        //         const payload = {
+        //             definitionId: "your_workflow_definition_id", // Replace with your workflow's definition ID
+        //             context: {
+        //                 // Pass any required input parameters for your workflow
+        //                 "inputParameter1": "value1",
+        //                 "inputParameter2": 123
+        //             }
+        //         };
 
-                 var startContext = { "POId": "300001999" };
-                 var workflowStartPayload = { definitionId: "com.demowf", context: startContext }
+        //         const response = await bpaService.send('POST', '/v1/workflow-instances', JSON.stringify(workflowStartPayload), {
+        //             'Content-Type': 'application/json'
+        //         });
 
-                const payload = {
-                    definitionId: "your_workflow_definition_id", // Replace with your workflow's definition ID
-                    context: {
-                        // Pass any required input parameters for your workflow
-                        "inputParameter1": "value1",
-                        "inputParameter2": 123
-                    }
-                };
-
-                const response = await bpaService.send('POST', '/v1/workflow-instances', JSON.stringify(workflowStartPayload), {
-                    'Content-Type': 'application/json'
-                });
-
-                if (response.status !== 201) {
-                    throw new Error(`Failed to trigger workflow: ${response.statusText}`);
+        //         if (response.status !== 201) {
+        //             throw new Error(`Failed to trigger workflow: ${response.statusText}`);
                     
-                }
+        //         }
 
-                return { message: "Workflow triggered successfully!", instanceId: response.id };
+        //         return { message: "Workflow triggered successfully!", instanceId: response.id };
                 
 
-            } catch (error) {
-                console.error("Error triggering workflow:", error);
-                req.error(500, `Failed to trigger workflow: ${error.message}`);
-            }
+        //     } catch (error) {
+        //         console.error("Error triggering workflow:", error);
+        //         req.error(500, `Failed to trigger workflow: ${error.message}`);
+        //     }
 
 
 
@@ -122,42 +139,44 @@ class SalesOrderService extends cds.ApplicationService {
 
     }
 
+    // end of create sales order
+
 
 }
 module.exports = SalesOrderService;
 
 
-class ProductCatalogService extends cds.ApplicationService {
+// class ProductCatalogService extends cds.ApplicationService {
 
 
   
 
 
-     async init() {
-        this.on('READ', this.ReadData);
-        return await super.init();
-    }
+//      async init() {
+//         this.on('READ', this.ReadData);
+//         return await super.init();
+//     }
 
-    async ReadData(req) {
+//     async ReadData(req) {
       
-         const backendconnnect = await cds.connect.to('GWSAMPLE');
+//        //  const backendconnnect = await cds.connect.to('GWSAMPLE');
 
 
-        // onst backendconnnect = await cds.connect.to('GWSAMPLE');
-        //    const tx  = backendconnnect.tx(req);
-        //    backendconnnect.run(SELECT.from('ProductSet'));
-        //   tx.run(req.query);
-         // const { ProductList } = backendconnnect.entities; 
+//         // onst backendconnnect = await cds.connect.to('GWSAMPLE');
+//         //    const tx  = backendconnnect.tx(req);
+//         //    backendconnnect.run(SELECT.from('ProductSet'));
+//         //   tx.run(req.query);
+//          // const { ProductList } = backendconnnect.entities; 
           
-          // const externalData = await backendconnnect.run(SELECT.from('ProductSet')); // Assuming 'Products' is the entity in external service
-          //return result = await backendconnnect.run(SELECT(ProductList));
+//           // const externalData = await backendconnnect.run(SELECT.from('ProductSet')); // Assuming 'Products' is the entity in external service
+//           //return result = await backendconnnect.run(SELECT(ProductList));
 
-    }
+//     }
 
 
-}
+// }
 
-module.exports = ProductCatalogService;
+// module.exports = ProductCatalogService;
 
 
 //  module.exports = cds.service.impl(async function() {

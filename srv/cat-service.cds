@@ -4,7 +4,7 @@ using GWSAMPLE  from './external/GWSAMPLE';
 
 service CatalogService {
 
- @odata.draft.enabled
+@odata.draft.enabled
  entity Books as projection on my.Books;
  entity Products as projection on my.Products;
 
@@ -27,7 +27,7 @@ service SalesOrderService {
 
     entity Books as projection on my.Books;
 
-
+     
     entity SalesOrders as projection on my.SalesOrders;   
     entity SalesOrderItems as projection on my.SalesOrderItems;
 
@@ -37,21 +37,13 @@ service SalesOrderService {
 
     action applyDiscount(percentage: Integer) returns array of Books; // Unbound action
 
+    action uploadFile(file: LargeBinary);
+
+    action   uploadFileToS3( file : LargeBinary)    returns {};
+
 }
 
- service ProductCatalogService {
-      entity ProductList as select from GWSAMPLE.ProductSet{
-        ProductID,
-        Description,
-        WeightMeasure,
-        WeightUnit,
-        Depth,
-        Height
-      }
 
-
-      action ReadData( );
- }
 
 
 

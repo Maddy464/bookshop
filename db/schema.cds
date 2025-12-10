@@ -7,12 +7,14 @@ entity MediaFile : managed {
  
 }
 
+@odata.draft.enabled: false
 entity Books {
   key ID    : Integer;
       title : String;
       stock : Integer;
 }
 
+@odata.draft.enabled: false
 entity UserData {
 
       UserName  : String;
@@ -22,6 +24,7 @@ entity UserData {
 
 }
 
+@odata.draft.enabled: false
 entity Products {
   key ID          : UUID;
       ProductName : String;
@@ -29,6 +32,7 @@ entity Products {
       Currency    : String;
 }
 
+@odata.draft.enabled: false
 entity SalesOrders {
   key ID                : UUID;
       SalesOrderType    : String;
@@ -37,6 +41,7 @@ entity SalesOrders {
                             on to_Items.parent = $self;
 }
 
+@odata.draft.enabled: false
 entity SalesOrderItems {
   key ID                : UUID;
       parent            : Association to SalesOrders;

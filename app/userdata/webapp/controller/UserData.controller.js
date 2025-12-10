@@ -73,40 +73,40 @@ sap.ui.define([
 
 		},
 
-		onPublish:function(){
+		onPublish: function () {
 
-         const odataModel = this.getOwnerComponent().getModel("SalesOrderModel");
-		// let oContext = odataModel.getBindingContext();
-    //      const sActionPath = "/publish(...)"; // Construct action path
+			const odataModel = this.getOwnerComponent().getModel("SalesOrderModel");
+			// let oContext = odataModel.getBindingContext();
+			//      const sActionPath = "/publish(...)"; // Construct action path
 
-    //         odataModel.callFunction(sActionPath, {
-    //     method: "POST",
-    //     urlParameters: {
-    //         bookID: 67 
-    //     },
-    //     success: function() {
-    //         MessageToast.show("Book published successfully!");
-    //     },
-    //     error: function(oError) {
-    //         MessageBox.error("Error publishing book: " + oError.message);
-    //     }
-    // });
+			//         odataModel.callFunction(sActionPath, {
+			//     method: "POST",
+			//     urlParameters: {
+			//         bookID: 67 
+			//     },
+			//     success: function() {
+			//         MessageToast.show("Book published successfully!");
+			//     },
+			//     error: function(oError) {
+			//         MessageBox.error("Error publishing book: " + oError.message);
+			//     }
+			// });
 
 
-	   const sActionPath = "/SalesOrderService.applyDiscount"; // Direct path to unbound action
+			const sActionPath = "/SalesOrderService.applyDiscount"; // Direct path to unbound action
 
-    odataModel.callFunction(sActionPath, {
-        method: "POST",
-        urlParameters: {
-            percentage: 10 // Pass parameters
-        },
-        success: function() {
-            MessageToast.show("Discount applied to all books!");
-        },
-        error: function(oError) {
-            MessageBox.error("Error applying discount: " + oError.message);
-        }
-    });
+			odataModel.callFunction(sActionPath, {
+				method: "POST",
+				urlParameters: {
+					percentage: 10 // Pass parameters
+				},
+				success: function () {
+					MessageToast.show("Discount applied to all books!");
+				},
+				error: function (oError) {
+					MessageBox.error("Error applying discount: " + oError.message);
+				}
+			});
 
 
 
@@ -115,42 +115,42 @@ sap.ui.define([
 
 		onCapm_extenal: function (oEvent) {
 
-           var oModel = this.getOwnerComponent().getModel("ProductCatModel");
-            
-		  //  oModel = this.getView().getModel();
-                let oBindList = oModel.bindList("/ProductList");
+			var oModel = this.getOwnerComponent().getModel("ProductCatModel");
 
-                oBindList.requestContexts().then(function (aContexts) {
-                    aContexts.forEach(oContext => {
-                        console.log(oContext.getObject());
-                    });
-                });
+			//  oModel = this.getView().getModel();
+			let oBindList = oModel.bindList("/ProductList");
+
+			oBindList.requestContexts().then(function (aContexts) {
+				aContexts.forEach(oContext => {
+					console.log(oContext.getObject());
+				});
+			});
 		},
 
 		onCapmaction: function (oEvent) {
 
 
-			
-
-
-
-             var oModel = this.getOwnerComponent().getModel("SalesOrderModel");
-            var oActionODataContextBinding = oModel.bindContext("/createSalesOrder(...)"); // Use "..." for parameters
-        
-
-        oActionODataContextBinding.execute().then(function() {
-            var oActionContext = oActionODataContextBinding.getBoundContext();
-            console.log(oActionContext.getObject()); // Access the action's return value
-            sap.m.MessageToast.show("Book promoted successfully!");
-        }).catch(function(oError) {
-            sap.m.MessageToast.show("Error promoting book: " + oError.message);
-        });
 
 
 
 
-			
-            // let sActionName = "SalesOrderService.createSalesOrder";
+			var oModel = this.getOwnerComponent().getModel("SalesOrderModel");
+			var oActionODataContextBinding = oModel.bindContext("/createSalesOrder(...)"); // Use "..." for parameters
+
+
+			oActionODataContextBinding.execute().then(function () {
+				var oActionContext = oActionODataContextBinding.getBoundContext();
+				console.log(oActionContext.getObject()); // Access the action's return value
+				sap.m.MessageToast.show("Book promoted successfully!");
+			}).catch(function (oError) {
+				sap.m.MessageToast.show("Error promoting book: " + oError.message);
+			});
+
+
+
+
+
+			// let sActionName = "SalesOrderService.createSalesOrder";
 			// let mParameters = {
 			// 	contexts: oEvent.getSource().getBindingContext(),
 			// 	model: oEvent.getSource().getModel(),
@@ -158,7 +158,7 @@ sap.ui.define([
 			// 	invocationGrouping: true 	
 			// };
 			// this.editFlow.invokeAction(sActionName, mParameters); //SAP Fiori elements EditFlow API
-            // MessageToast.show("Custom handler invoked.");
+			// MessageToast.show("Custom handler invoked.");
 
 			// var oModel = this.getOwnerComponent().getModel("SalesOrderModel");
 
@@ -184,16 +184,16 @@ sap.ui.define([
 
 		},
 
-		onReadProduct : function () {
+		onReadProduct: function () {
 
-            let oModel = this.getView().getModel("ProductCatModel");
-                let oBindList = oModel.bindList("/ProductList");
+			let oModel = this.getView().getModel("ProductCatModel");
+			let oBindList = oModel.bindList("/ProductList");
 
-                oBindList.requestContexts().then(function (aContexts) {
-                    aContexts.forEach(oContext => {
-                        console.log(oContext.getObject());
-                    });
-                });
+			oBindList.requestContexts().then(function (aContexts) {
+				aContexts.forEach(oContext => {
+					console.log(oContext.getObject());
+				});
+			});
 
 
 
@@ -811,7 +811,27 @@ sap.ui.define([
 			var oModel = this.getView().getModel("appView");
 
 			oModel.setProperty("/busy", bIsBusy);
+		},
+
+		//start of upload methids
+
+		onUploadPress: function () {
+			const oFileUploader = this.byId("fileUploader");
+			oFileUploader.upload(); // Triggers the upload
+		},
+
+		onUploadComplete: function (oEvent) {
+			const sResponse = oEvent.getParameter("response");
+			// Handle the response from the CAPM action
+			console.log("Upload complete. Response:", sResponse);
+			sap.m.MessageToast.show("File upload status: " + sResponse);
+			// You might need to refresh the Fiori app data if the upload affects it
 		}
+
+		//end of upload methods
+
+
+
 
 
 		//end of methods
